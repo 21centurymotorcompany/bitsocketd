@@ -35,8 +35,11 @@ const init = function(config) {
 
       res.$fingerprint = fingerprint
       connections.pool[fingerprint] = { res: res, query: query }
+      console.log("## Opening connection from: " + fingerprint)
+      console.log(JSON.stringify(req.headers, null, 2))
       req.on("close", function() {
-        console.log("## Closing connection from: " + JSON.stringify(req.headers, null, 2))
+        console.log("## Closing connection from: " + res.$fingerprint)
+        console.log(JSON.stringify(req.headers, null, 2))
         delete connections.pool[res.$fingerprint]
         console.log(".. Pool size is now", Object.keys(connections.pool).length)
       })
@@ -59,8 +62,11 @@ const init = function(config) {
       res.$fingerprint = fingerprint
       connections.pool[fingerprint] = { res: res, query: query }
 
+      console.log("## Opening connection from: " + fingerprint)
+      console.log(JSON.stringify(req.headers, null, 2))
       req.on("close", function() {
-        console.log("## Closing connection from: " + JSON.stringify(req.headers, null, 2))
+        console.log("## Closing connection from: " + res.$fingerprint)
+        console.log(JSON.stringify(req.headers, null, 2))
         delete connections.pool[res.$fingerprint]
         console.log(".. Pool size is now", Object.keys(connections.pool).length)
       })
