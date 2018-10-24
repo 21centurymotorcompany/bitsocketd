@@ -1,6 +1,6 @@
 {
   "name": "bitsocketd",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The message bus for bitcoin",
   "main": "index.js",
   "scripts": {
@@ -11,6 +11,7 @@
   "dependencies": {
     "bcode": "0.0.6",
     "bigjq": "0.0.7",
+    "bitcore-lib-cash": "^0.18.1",
     "cors": "^2.8.4",
     "express": "^4.16.4",
     "ip": "^1.1.5",

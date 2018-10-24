@@ -18,7 +18,8 @@ const init = function(config) {
     switch (type) {
       case "mempool": {
         let tx = JSON.parse(o)
-        connections.pool.forEach(async function(connection) {
+        Object.keys(connections.pool).forEach(async function(key) {
+          let connection = connections.pool[key]
           const encoded = bcode.encode(connection.query)
           const types = encoded.q.db
           if (!types || types.indexOf("u") >= 0) {
@@ -43,7 +44,8 @@ const init = function(config) {
       }
       case "block": {
         let block = JSON.parse(o)
-        connections.pool.forEach(async function(connection) {
+        Object.keys(connections.pool).forEach(async function(key) {
+          let connection = connections.pool[key]
           const encoded = bcode.encode(connection.query)
           const types = encoded.q.db
           if (!types || types.indexOf("c") >= 0) {

@@ -2,6 +2,7 @@
 const cors = require("cors")
 const express = require("express")
 const ip = require("ip")
+const bch = require("bitcore-lib-cash")
 const defaults = { port: 3001 }
 const init = function(config) {
   let app = (config.app ? config.app : express())
@@ -27,11 +28,20 @@ const init = function(config) {
       let query = {
         "v": 3, "q": { "find": {} }
       }
-      connections.pool.push({ res: res, query: query })
+
+      // bitcoin address as fingerprint
+      const privateKey = new bch.PrivateKey()
+      const fingerprint = privateKey.toAddress().toString()
+
+      res.$fingerprint = fingerprint
+      connections.pool[fingerprint] = { res: res, query: query }
+      console.log("## Opening connection from: " + fingerprint)
+      console.log(JSON.stringify(req.headers, null, 2))
       req.on("close", function() {
-        console.log("## Closing connection from: " + JSON.stringify(req.headers, null, 2))
-        connections.pool.splice(connections.pool.indexOf(res), 1)
-        console.log(".. Pool size is now", connections.pool.length)
+        console.log("## Closing connection from: " + res.$fingerprint)
+        console.log(JSON.stringify(req.headers, null, 2))
+        delete connections.pool[res.$fingerprint]
+        console.log(".. Pool size is now", Object.keys(connections.pool).length)
       })
     } catch (e) {
       console.log(e)
@@ -40,14 +50,25 @@ const init = function(config) {
   app.get(/^\/s\/(.+)/, async function(req, res) {
     try {
       let b64 = req.params[0]
+
+      // bitcoin address as fingerprint
+      const privateKey = new bch.PrivateKey()
+      const fingerprint = privateKey.toAddress().toString()
+
       res.sseSetup()
       let json = Buffer.from(b64, "base64").toString()
       let query = JSON.parse(json)
-      connections.pool.push({ res: res, query: query })
+
+      res.$fingerprint = fingerprint
+      connections.pool[fingerprint] = { res: res, query: query }
+
+      console.log("## Opening connection from: " + fingerprint)
+      console.log(JSON.stringify(req.headers, null, 2))
       req.on("close", function() {
-        console.log("## Closing connection from: " + JSON.stringify(req.headers, null, 2))
-        connections.pool.splice(connections.pool.indexOf(res), 1)
-        console.log(".. Pool size is now", connections.pool.length)
+        console.log("## Closing connection from: " + res.$fingerprint)
+        console.log(JSON.stringify(req.headers, null, 2))
+        delete connections.pool[res.$fingerprint]
+        console.log(".. Pool size is now", Object.keys(connections.pool).length)
       })
     } catch (e) {
       console.log(e)
