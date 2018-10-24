@@ -37,7 +37,7 @@ That's the raw firehose. You probably don't want to consume the whole thing, so 
 
 ## 2. Custom BitDB node
 
-You can specify the bitdb node, like this:
+You can specify the Zeromq subscriber from a bitdb node, like this:
 
 ```
 const bitsocketd = require('bitsocketd')
@@ -45,6 +45,9 @@ bitsocketd.init({
   bit: { host: "127.0.0.1", port: 28339 },
 })
 ```
+
+By default Bitdb's zeromq publisher broadcasts to [port 28339](https://github.com/21centurymotorcompany/bitd/blob/master/config.js#L44), but you can customize if you want.
+
 
 ## 3. Custom SSE port
 
