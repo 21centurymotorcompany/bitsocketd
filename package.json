@@ -1,0 +1,23 @@
+{
+  "name": "bitsocketd",
+  "version": "0.1.0",
+  "description": "The message bus for bitcoin",
+  "main": "index.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint *.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcode": "0.0.6",
+    "bigjq": "0.0.7",
+    "cors": "^2.8.4",
+    "express": "^4.16.4",
+    "ip": "^1.1.5",
+    "mingo": "^2.2.4",
+    "zeromq": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.7.0"
+  }
+}
