@@ -3,7 +3,7 @@ const socket = require("./socket")
 const init = function(config) {
 
   // Cconnection pool init
-  const connections = { pool: [] }
+  const connections = { pool: {} }
 
   // Bitdb Consumer Init
   let b = (config && config.bit ? Object.assign({}, config.bit) : {})
